@@ -29,7 +29,7 @@ OK="${Green}[OK]${Font}"
 Error="${Red}[错误]${Font}"
 
 # 版本
-shell_version="1.2.3.4"
+shell_version="1.2.3.5"
 shell_mode="None"
 github_branch="master"
 version_cmp="/tmp/version_cmp.tmp"
@@ -49,8 +49,8 @@ v2ray_access_log="/var/log/v2ray/access.log"
 v2ray_error_log="/var/log/v2ray/error.log"
 amce_sh_file="/root/.acme.sh/acme.sh"
 ssl_update_file="/usr/bin/ssl_update.sh"
-nginx_version="1.16.1"
-openssl_version="1.1.1g"
+nginx_version="1.19.6"
+openssl_version="1.1.1i"
 jemalloc_version="5.2.1"
 old_config_status="off"
 # v2ray_plugin_version="$(wget -qO- "https://github.com/shadowsocks/v2ray-plugin/tags" | grep -E "/shadowsocks/v2ray-plugin/releases/tag/" | head -1 | sed -r 's/.*tag\/v(.+)\">.*/\1/')"
@@ -232,8 +232,8 @@ port_alterid_set() {
     if [[ "on" != "$old_config_status" ]]; then
         read -rp "请输入连接端口（default:443）:" port
         [[ -z ${port} ]] && port="443"
-        read -rp "请输入alterID（default:2 仅允许填数字）:" alterID
-        [[ -z ${alterID} ]] && alterID="2"
+        read -rp "请输入alterID（default:7 仅允许填数字）:" alterID
+        [[ -z ${alterID} ]] && alterID="7"
     fi
 }
 modify_path() {
@@ -486,7 +486,7 @@ acme() {
 }
 v2ray_conf_add_tls() {
     cd /etc/v2ray || exit
-    wget --no-check-certificate https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/${github_branch}/tls/config.json -O config.json
+    wget --no-check-certificate https://github.com/TheZ4ro/V2Ray_ws-tls_bash_onekey/raw/master/tls/config.json -O config.json
     modify_path
     modify_alterid
     modify_inbound_port
@@ -494,7 +494,7 @@ v2ray_conf_add_tls() {
 }
 v2ray_conf_add_h2() {
     cd /etc/v2ray || exit
-    wget --no-check-certificate https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/${github_branch}/http2/config.json -O config.json
+    wget --no-check-certificate https://github.com/TheZ4ro/V2Ray_ws-tls_bash_onekey/raw/master/http2/config.json -O config.json
     modify_path
     modify_alterid
     modify_inbound_port
@@ -598,7 +598,7 @@ nginx_process_disabled() {
 #    judge "rc.local 配置"
 #}
 acme_cron_update() {
-    wget -N -P /usr/bin --no-check-certificate "https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/dev/ssl_update.sh"
+    wget -N -P /usr/bin --no-check-certificate "https://github.com/TheZ4ro/V2Ray_ws-tls_bash_onekey/raw/master/ssl_update.sh"
     if [[ "${ID}" == "centos" ]]; then
         #        sed -i "/acme.sh/c 0 3 * * 0 \"/root/.acme.sh\"/acme.sh --cron --home \"/root/.acme.sh\" \
         #        &> /dev/null" /var/spool/cron/root
@@ -857,7 +857,7 @@ install_v2_h2() {
 
 }
 update_sh() {
-    ol_version=$(curl -L -s https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/${github_branch}/install.sh | grep "shell_version=" | head -1 | awk -F '=|"' '{print $3}')
+    ol_version=$(curl -L -s https://github.com/TheZ4ro/V2Ray_ws-tls_bash_onekey/raw/master/install.sh | grep "shell_version=" | head -1 | awk -F '=|"' '{print $3}')
     echo "$ol_version" >$version_cmp
     echo "$shell_version" >>$version_cmp
     if [[ "$shell_version" < "$(sort -rV $version_cmp | head -1)" ]]; then
@@ -865,7 +865,7 @@ update_sh() {
         read -r update_confirm
         case $update_confirm in
         [yY][eE][sS] | [yY])
-            wget -N --no-check-certificate https://raw.githubusercontent.com/wulabing/V2Ray_ws-tls_bash_onekey/${github_branch}/install.sh
+            wget -N --no-check-certificate https://github.com/TheZ4ro/V2Ray_ws-tls_bash_onekey/raw/master/install.sh
             echo -e "${OK} ${GreenBG} 更新完成 ${Font}"
             exit 0
             ;;
